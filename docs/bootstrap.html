@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 Bootstrap | Machine Learning for Biostatistics</title>
+  <meta name="description" content="1 Bootstrap | Machine Learning for Biostatistics" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 Bootstrap | Machine Learning for Biostatistics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 Bootstrap | Machine Learning for Biostatistics" />
+  
+  
+  
+
+<meta name="author" content="Armando Teixeira-Pinto" />
+
+
+<meta name="date" content="2025-07-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="cross-validation.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><center><img src="bca.png"><H3><b><font color="F26531"> Machine Learning for Biostatistics </font> </b></H3> <a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><small><i> Back to canvas website </i></small></a></center></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Resampling methods</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#introduction"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataset-used-in-the-examples"><i class="fa fa-check"></i>Dataset used in the examples</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#slides"><i class="fa fa-check"></i>Slides</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="bootstrap.html"><a href="bootstrap.html"><i class="fa fa-check"></i><b>1</b> Bootstrap</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="bootstrap.html"><a href="bootstrap.html#boot.intro"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="bootstrap.html"><a href="bootstrap.html#boot.read"><i class="fa fa-check"></i><b>1.2</b> Readings</a></li>
+<li class="chapter" data-level="1.3" data-path="bootstrap.html"><a href="bootstrap.html#boot.prac"><i class="fa fa-check"></i><b>1.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="bootstrap.html"><a href="bootstrap.html#task---confidence-intervals-with-bootstrap"><i class="fa fa-check"></i>Task - Confidence intervals with bootstrap</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="bootstrap.html"><a href="bootstrap.html#boot.exerc"><i class="fa fa-check"></i><b>1.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="cross-validation.html"><a href="cross-validation.html"><i class="fa fa-check"></i><b>2</b> Cross-validation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="cross-validation.html"><a href="cross-validation.html#cv.intro"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="cross-validation.html"><a href="cross-validation.html#cv.read"><i class="fa fa-check"></i><b>2.2</b> Readings</a></li>
+<li class="chapter" data-level="2.3" data-path="cross-validation.html"><a href="cross-validation.html#cv.prac"><i class="fa fa-check"></i><b>2.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-validation.html"><a href="cross-validation.html#task-1---cross-validated-mse-and-r2"><i class="fa fa-check"></i>Task 1 - Cross-validated MSE and R<sup>2</sup></a></li>
+<li class="chapter" data-level="" data-path="cross-validation.html"><a href="cross-validation.html#task-2---roc-cross-validation"><i class="fa fa-check"></i>Task 2 - ROC cross-validation</a></li>
+<li class="chapter" data-level="" data-path="cross-validation.html"><a href="cross-validation.html#task-3---classification"><i class="fa fa-check"></i>Task 3 - Classification</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="cross-validation.html"><a href="cross-validation.html#cv.exerc"><i class="fa fa-check"></i><b>2.4</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><center><a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><img src="usyd2.gif" width="60%"></a> <small>© A.Teixeira-Pinto, University of Sydney, 2021</small></center></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="../_book">Machine Learning for Biostatistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bootstrap" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Bootstrap<a href="bootstrap.html#bootstrap" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="boot.intro" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Introduction<a href="bootstrap.html#boot.intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Bootstrap was proposed by
+<a href="https://projecteuclid.org/download/pdf_1/euclid.aos/1176344552">Efron in 1979</a>
+and it mimics the sampling process by sampling with replacement
+the original sample. This process replicates the sample variation and allows
+the calculation of standard errors. It can also be used to refine more
+complex machine learning algorithms, as we will see later.</p>
+<p>From the original sample of size <span class="math inline">\(n\)</span>, we create many (e.g. 10,000) samples of
+size <span class="math inline">\(n\)</span> by sampling from the original sample with replacement. Notice that the replacement
+allows the same value to be included multiple times in the same sample. This
+is why you can create many different samples.
+For each of the bootstrapped samples we compute the statistics of interest. The
+standard deviation of all these computed statistics, is the standard error.</p>
+<p><iframe width="784" height="441" src="https://www.youtube.com/embed/U8r-UrwTOy4" 
+ frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; 
+ picture-in-picture" allowfullscreen></iframe></p>
+</div>
+<div id="boot.read" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Readings<a href="bootstrap.html#boot.read" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Read the following chapter of <em>An introduction to statistical learning</em>:</p>
+<ul>
+<li>5.2 The Bootstrap</li>
+</ul>
+</div>
+<div id="boot.prac" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Practice session<a href="bootstrap.html#boot.prac" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="task---confidence-intervals-with-bootstrap" class="section level3 unnumbered hasAnchor">
+<h3>Task - Confidence intervals with bootstrap<a href="bootstrap.html#task---confidence-intervals-with-bootstrap" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We will be using the
+<a href="https://www.dropbox.com/s/7wjsfdaf0wt2kg2/bmd.csv?dl=1">bmd.csv</a>
+dataset to plot the histogram, compute the median and 95% confidence interval
+for the “waiting_time”</p>
+<p>Let’s first read the data and create the variable BMI that will be used later.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="bootstrap.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co">#library for Machine Learning</span></span></code></pre></div>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="bootstrap.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(boot)  <span class="co">#library for bootstrap</span></span>
+<span id="cb3-2"><a href="bootstrap.html#cb3-2" tabindex="-1"></a><span class="fu">library</span>(pROC)  <span class="co">#library for the ROC curve</span></span>
+<span id="cb3-3"><a href="bootstrap.html#cb3-3" tabindex="-1"></a><span class="fu">library</span>(Rmisc) <span class="co">#CI() function to compute conf interval</span></span>
+<span id="cb3-4"><a href="bootstrap.html#cb3-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1974</span>)</span>
+<span id="cb3-5"><a href="bootstrap.html#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="bootstrap.html#cb3-6" tabindex="-1"></a><span class="co">#the option stringsAsFactors = TRUE in the command below converts </span></span>
+<span id="cb3-7"><a href="bootstrap.html#cb3-7" tabindex="-1"></a><span class="co">#string variables as sex into factor variables</span></span>
+<span id="cb3-8"><a href="bootstrap.html#cb3-8" tabindex="-1"></a>bmd.data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/c6mhgatkotuze8o/bmd.csv?dl=1&quot;</span>, </span>
+<span id="cb3-9"><a href="bootstrap.html#cb3-9" tabindex="-1"></a>                     <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-10"><a href="bootstrap.html#cb3-10" tabindex="-1"></a><span class="co">#computes the BMI</span></span>
+<span id="cb3-11"><a href="bootstrap.html#cb3-11" tabindex="-1"></a>bmd.data<span class="sc">$</span>bmi <span class="ot">&lt;-</span> bmd.data<span class="sc">$</span>weight_kg <span class="sc">/</span> (bmd.data<span class="sc">$</span>height_cm<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<p>Let’s plot the histogram for <em>waiting time</em> and compute the median</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="bootstrap.html#cb4-1" tabindex="-1"></a><span class="fu">hist</span>(bmd.data<span class="sc">$</span>waiting_time)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="bootstrap.html#cb5-1" tabindex="-1"></a><span class="fu">median</span>(bmd.data<span class="sc">$</span>waiting_time)</span></code></pre></div>
+<pre><code>## [1] 14</code></pre>
+<p>And now use the function <strong>boot()</strong>, from the library <strong>boot</strong>, to bootstrap the median. We will also compute it manually</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="bootstrap.html#cb7-1" tabindex="-1"></a><span class="co">#using the boot function</span></span>
+<span id="cb7-2"><a href="bootstrap.html#cb7-2" tabindex="-1"></a><span class="fu">median</span>(bmd.data<span class="sc">$</span>waiting_time)</span></code></pre></div>
+<pre><code>## [1] 14</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="bootstrap.html#cb9-1" tabindex="-1"></a>samplemedian <span class="ot">&lt;-</span> <span class="cf">function</span>(x, d) { <span class="co">#need to define the function to use bootstrap</span></span>
+<span id="cb9-2"><a href="bootstrap.html#cb9-2" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">median</span>(x[d]))           <span class="co">#d is the index for the bootstrap</span></span>
+<span id="cb9-3"><a href="bootstrap.html#cb9-3" tabindex="-1"></a>}</span>
+<span id="cb9-4"><a href="bootstrap.html#cb9-4" tabindex="-1"></a>bootresults <span class="ot">&lt;-</span> <span class="fu">boot</span>(bmd.data<span class="sc">$</span>waiting_time, <span class="at">statistic=</span>samplemedian, <span class="at">R=</span><span class="dv">10000</span>)</span>
+<span id="cb9-5"><a href="bootstrap.html#cb9-5" tabindex="-1"></a><span class="co"># get 95% confidence interval </span></span>
+<span id="cb9-6"><a href="bootstrap.html#cb9-6" tabindex="-1"></a><span class="fu">boot.ci</span>(bootresults, <span class="at">type=</span><span class="st">&quot;perc&quot;</span>)</span></code></pre></div>
+<pre><code>## BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+## Based on 10000 bootstrap replicates
+## 
+## CALL : 
+## boot.ci(boot.out = bootresults, type = &quot;perc&quot;)
+## 
+## Intervals : 
+## Level     Percentile     
+## 95%   (13, 18 )  
+## Calculations and Intervals on Original Scale</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="bootstrap.html#cb11-1" tabindex="-1"></a><span class="co">#manual bootstrap</span></span>
+<span id="cb11-2"><a href="bootstrap.html#cb11-2" tabindex="-1"></a>median.bs <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb11-3"><a href="bootstrap.html#cb11-3" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>){ <span class="co"># change to 10000</span></span>
+<span id="cb11-4"><a href="bootstrap.html#cb11-4" tabindex="-1"></a>  sample.bs    <span class="ot">&lt;-</span> <span class="fu">sample</span>(bmd.data<span class="sc">$</span>waiting_time, <span class="dv">169</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-5"><a href="bootstrap.html#cb11-5" tabindex="-1"></a>  median.bs[i] <span class="ot">&lt;-</span> <span class="fu">median</span>(sample.bs)</span>
+<span id="cb11-6"><a href="bootstrap.html#cb11-6" tabindex="-1"></a>}</span>
+<span id="cb11-7"><a href="bootstrap.html#cb11-7" tabindex="-1"></a><span class="fu">median</span>(median.bs)  <span class="co">#median (could use mean) of all the bootstrapped medians</span></span></code></pre></div>
+<pre><code>## [1] 14</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="bootstrap.html#cb13-1" tabindex="-1"></a><span class="fu">sd</span>(median.bs)      <span class="co">#Std error of the median</span></span></code></pre></div>
+<pre><code>## [1] 1.34752</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="bootstrap.html#cb15-1" tabindex="-1"></a><span class="fu">quantile</span>(median.bs, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))  <span class="co">#95% empirical confidence interval</span></span></code></pre></div>
+<pre><code>##  2.5% 97.5% 
+##    12    18</code></pre>
+<p><strong>TRY IT YOURSELF:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Compute the mean for <em>waiting_time</em> and the usual 95% confidence
+interval using the <strong>CI()</strong> function.</li>
+</ol>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="bootstrap.html#cb17-1" tabindex="-1"></a><span class="co">#library(Rmisc) #CI() function to compute the conf interval for the mean</span></span>
+<span id="cb17-2"><a href="bootstrap.html#cb17-2" tabindex="-1"></a><span class="fu">CI</span>(bmd.data<span class="sc">$</span>waiting_time)</span></code></pre></div>
+</details>
+<p>
+<p>
+<ol start="2" style="list-style-type: decimal">
+<li>Compute the 95% confidence interval for the mean using the boot function</li>
+</ol>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="bootstrap.html#cb18-1" tabindex="-1"></a><span class="fu">CI</span>(bmd.data<span class="sc">$</span>waiting_time)</span>
+<span id="cb18-2"><a href="bootstrap.html#cb18-2" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="bootstrap.html#cb18-3" tabindex="-1"></a>samplemean <span class="ot">&lt;-</span> <span class="cf">function</span>(x, d) { <span class="co">#need to define the function to use bootstrap</span></span>
+<span id="cb18-4"><a href="bootstrap.html#cb18-4" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(x[d]))           <span class="co">#d is the index for the bootstrap</span></span>
+<span id="cb18-5"><a href="bootstrap.html#cb18-5" tabindex="-1"></a>}</span>
+<span id="cb18-6"><a href="bootstrap.html#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="bootstrap.html#cb18-7" tabindex="-1"></a>bootresults <span class="ot">&lt;-</span> <span class="fu">boot</span>(bmd.data<span class="sc">$</span>waiting_time, <span class="at">statistic=</span>samplemean, <span class="at">R=</span><span class="dv">10000</span>)</span>
+<span id="cb18-8"><a href="bootstrap.html#cb18-8" tabindex="-1"></a><span class="fu">boot.ci</span>(bootresults, <span class="at">type=</span><span class="st">&quot;perc&quot;</span>)</span></code></pre></div>
+</details>
+<p>
+<p>
+</div>
+</div>
+<div id="boot.exerc" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Exercises<a href="bootstrap.html#boot.exerc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Solve the following exercises:</p>
+<p>The <a href="https://www.dropbox.com/s/4t7nph5d97hq0qh/diabetes.csv?dl=1">diabetes data</a>
+were provided by Hastie and Tibshirani (1990, p. 6).
+The observations arise from a study of the factors affecting patterns of
+insulin-dependent diabetes mellitus in 43 children (Sockett et al., 1987).
+The aim was to investigate the dependence of serum C-peptide on other factors,
+better to understand the patterns of residual insulin secretion.</p>
+<p>The response, <em>cpep</em>, is the log of C-peptide concentration at diagnosis, and
+the selected covariates are <em>age</em>, the child’s age at diagnosis, and <em>base</em>,
+minus their base deficit. Base deficit is a measure of acidity.</p>
+<ol style="list-style-type: decimal">
+<li><p>Calculate the Pearson correlation coefficient between <em>cpep</em> and <em>base</em> with
+the respective 95% confidence interval obtained by the <a href="https://en.wikipedia.org/wiki/Fisher_transformation">Fisher’s
+z-transformation</a> (the
+usual way of getting the confidence interval for the Pearson’s correlation)<br />
+<em>Note: you can use the function CIr in the “psychometric” package</em></p></li>
+<li><p>Write your own function to compute the 95% confidence interval
+for the above correlation, using bootstrap.</p></li>
+<li><p>Use the function <em>boot()</em> from the <em>boot</em> package to compute
+the 95% confidence interval through bootstrap</p></li>
+<li><p>Plot the histogram with the correlations obtained in
+the bootstrap samples.</p></li>
+</ol>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="bootstrap.html#cb19-1" tabindex="-1"></a><span class="co">#install.packages(&quot;psychometric&quot;) # install package with function for</span></span>
+<span id="cb19-2"><a href="bootstrap.html#cb19-2" tabindex="-1"></a>                                 <span class="co"># the correlation confidence interval</span></span>
+<span id="cb19-3"><a href="bootstrap.html#cb19-3" tabindex="-1"></a><span class="co">#install.packages(&quot;boot&quot;)         # install package for bootstrap function</span></span>
+<span id="cb19-4"><a href="bootstrap.html#cb19-4" tabindex="-1"></a><span class="fu">library</span>(boot)</span>
+<span id="cb19-5"><a href="bootstrap.html#cb19-5" tabindex="-1"></a><span class="fu">library</span>(psychometric) </span></code></pre></div>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.3.1</code></pre>
+<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.3.3</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="bootstrap.html#cb22-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1001</span>)</span>
+<span id="cb22-2"><a href="bootstrap.html#cb22-2" tabindex="-1"></a>myData <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/6rc00ealjtyp3qi/diabetes.csv?dl=1&quot;</span>)</span>
+<span id="cb22-3"><a href="bootstrap.html#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="bootstrap.html#cb22-4" tabindex="-1"></a>sample.size <span class="ot">&lt;-</span> <span class="fu">dim</span>(myData)[<span class="dv">1</span>] <span class="co">#nr of observations</span></span>
+<span id="cb22-5"><a href="bootstrap.html#cb22-5" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="bootstrap.html#cb22-6" tabindex="-1"></a><span class="co">#1 - the Person correlation</span></span>
+<span id="cb22-7"><a href="bootstrap.html#cb22-7" tabindex="-1"></a>  <span class="fu">cor</span>(myData<span class="sc">$</span>base, myData<span class="sc">$</span>cpep)</span>
+<span id="cb22-8"><a href="bootstrap.html#cb22-8" tabindex="-1"></a>  <span class="fu">CIr</span>( <span class="at">r =</span> <span class="fu">cor</span>(myData<span class="sc">$</span>base, myData<span class="sc">$</span>cpep),   <span class="co">#conf interval using</span></span>
+<span id="cb22-9"><a href="bootstrap.html#cb22-9" tabindex="-1"></a>       <span class="at">n =</span> sample.size, <span class="at">level =</span> .<span class="dv">95</span>)        <span class="co"># Fisher&#39;s z-transformations</span></span>
+<span id="cb22-10"><a href="bootstrap.html#cb22-10" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="bootstrap.html#cb22-11" tabindex="-1"></a><span class="co">#2 - Bootstrap</span></span>
+<span id="cb22-12"><a href="bootstrap.html#cb22-12" tabindex="-1"></a>  n.boot   <span class="ot">&lt;-</span> <span class="dv">25000</span>  <span class="co">#choose how many bootstraps</span></span>
+<span id="cb22-13"><a href="bootstrap.html#cb22-13" tabindex="-1"></a>  cor.boot <span class="ot">&lt;-</span> <span class="cn">NULL</span> <span class="co"># to store the bootstrap correlations</span></span>
+<span id="cb22-14"><a href="bootstrap.html#cb22-14" tabindex="-1"></a>  </span>
+<span id="cb22-15"><a href="bootstrap.html#cb22-15" tabindex="-1"></a>  <span class="co">#manually implementing bootstrap</span></span>
+<span id="cb22-16"><a href="bootstrap.html#cb22-16" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.boot) {</span>
+<span id="cb22-17"><a href="bootstrap.html#cb22-17" tabindex="-1"></a>    id.bs <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(sample.size,   <span class="co">#bootstrap the</span></span>
+<span id="cb22-18"><a href="bootstrap.html#cb22-18" tabindex="-1"></a>                        sample.size,   <span class="co">#original sample</span></span>
+<span id="cb22-19"><a href="bootstrap.html#cb22-19" tabindex="-1"></a>                        <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-20"><a href="bootstrap.html#cb22-20" tabindex="-1"></a>    cor.boot[i] <span class="ot">&lt;-</span> <span class="fu">cor</span>(myData[id.bs, ])[<span class="dv">2</span>,<span class="dv">3</span>]  <span class="co">#Compute correlation</span></span>
+<span id="cb22-21"><a href="bootstrap.html#cb22-21" tabindex="-1"></a>                                              <span class="co">#between</span></span>
+<span id="cb22-22"><a href="bootstrap.html#cb22-22" tabindex="-1"></a>   }</span>
+<span id="cb22-23"><a href="bootstrap.html#cb22-23" tabindex="-1"></a>   <span class="fu">quantile</span>(cor.boot, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))  <span class="co">#95% confidence interval</span></span>
+<span id="cb22-24"><a href="bootstrap.html#cb22-24" tabindex="-1"></a>  </span>
+<span id="cb22-25"><a href="bootstrap.html#cb22-25" tabindex="-1"></a><span class="co">#3 - Using the boot() function</span></span>
+<span id="cb22-26"><a href="bootstrap.html#cb22-26" tabindex="-1"></a>  sample.corr <span class="ot">&lt;-</span> <span class="cf">function</span>(data, d) {  </span>
+<span id="cb22-27"><a href="bootstrap.html#cb22-27" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">cor</span>(data<span class="sc">$</span>base[d], data<span class="sc">$</span>cpep[d]))   <span class="co">#d is the index for the bootstrap</span></span>
+<span id="cb22-28"><a href="bootstrap.html#cb22-28" tabindex="-1"></a>  }</span>
+<span id="cb22-29"><a href="bootstrap.html#cb22-29" tabindex="-1"></a>    </span>
+<span id="cb22-30"><a href="bootstrap.html#cb22-30" tabindex="-1"></a>  bootcorr <span class="ot">&lt;-</span> <span class="fu">boot</span>(myData, </span>
+<span id="cb22-31"><a href="bootstrap.html#cb22-31" tabindex="-1"></a>                   <span class="at">statistic=</span>sample.corr, </span>
+<span id="cb22-32"><a href="bootstrap.html#cb22-32" tabindex="-1"></a>                   <span class="at">R=</span>n.boot)</span>
+<span id="cb22-33"><a href="bootstrap.html#cb22-33" tabindex="-1"></a>  <span class="co"># get 95% confidence interval </span></span>
+<span id="cb22-34"><a href="bootstrap.html#cb22-34" tabindex="-1"></a>  <span class="fu">boot.ci</span>(bootcorr, <span class="at">type=</span><span class="st">&quot;perc&quot;</span>)</span>
+<span id="cb22-35"><a href="bootstrap.html#cb22-35" tabindex="-1"></a></span>
+<span id="cb22-36"><a href="bootstrap.html#cb22-36" tabindex="-1"></a><span class="co">#4 - Histogram</span></span>
+<span id="cb22-37"><a href="bootstrap.html#cb22-37" tabindex="-1"></a>  <span class="co">#the correlations for the bootstrap samples</span></span>
+<span id="cb22-38"><a href="bootstrap.html#cb22-38" tabindex="-1"></a>  <span class="co">#are stored in bootcorr$t</span></span>
+<span id="cb22-39"><a href="bootstrap.html#cb22-39" tabindex="-1"></a>  <span class="fu">hist</span>(bootcorr<span class="sc">$</span>t)</span></code></pre></div>
+<p><img src="_main_files/figure-html/boostrapexercise-1.png" width="672" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="bootstrap.html#cb23-1" tabindex="-1"></a>  <span class="co">#or </span></span>
+<span id="cb23-2"><a href="bootstrap.html#cb23-2" tabindex="-1"></a>  <span class="co">#hist(cor.boot)</span></span></code></pre></div>
+</details>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="cross-validation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Cross-validation | Machine Learning for Biostatistics</title>
+  <meta name="description" content="2 Cross-validation | Machine Learning for Biostatistics" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Cross-validation | Machine Learning for Biostatistics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Cross-validation | Machine Learning for Biostatistics" />
+  
+  
+  
+
+<meta name="author" content="Armando Teixeira-Pinto" />
+
+
+<meta name="date" content="2025-07-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="bootstrap.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><center><img src="bca.png"><H3><b><font color="F26531"> Machine Learning for Biostatistics </font> </b></H3> <a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><small><i> Back to canvas website </i></small></a></center></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Resampling methods</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#introduction"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataset-used-in-the-examples"><i class="fa fa-check"></i>Dataset used in the examples</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#slides"><i class="fa fa-check"></i>Slides</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="bootstrap.html"><a href="bootstrap.html"><i class="fa fa-check"></i><b>1</b> Bootstrap</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="bootstrap.html"><a href="bootstrap.html#boot.intro"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="bootstrap.html"><a href="bootstrap.html#boot.read"><i class="fa fa-check"></i><b>1.2</b> Readings</a></li>
+<li class="chapter" data-level="1.3" data-path="bootstrap.html"><a href="bootstrap.html#boot.prac"><i class="fa fa-check"></i><b>1.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="bootstrap.html"><a href="bootstrap.html#task---confidence-intervals-with-bootstrap"><i class="fa fa-check"></i>Task - Confidence intervals with bootstrap</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="bootstrap.html"><a href="bootstrap.html#boot.exerc"><i class="fa fa-check"></i><b>1.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="cross-validation.html"><a href="cross-validation.html"><i class="fa fa-check"></i><b>2</b> Cross-validation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="cross-validation.html"><a href="cross-validation.html#cv.intro"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="cross-validation.html"><a href="cross-validation.html#cv.read"><i class="fa fa-check"></i><b>2.2</b> Readings</a></li>
+<li class="chapter" data-level="2.3" data-path="cross-validation.html"><a href="cross-validation.html#cv.prac"><i class="fa fa-check"></i><b>2.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-validation.html"><a href="cross-validation.html#task-1---cross-validated-mse-and-r2"><i class="fa fa-check"></i>Task 1 - Cross-validated MSE and R<sup>2</sup></a></li>
+<li class="chapter" data-level="" data-path="cross-validation.html"><a href="cross-validation.html#task-2---roc-cross-validation"><i class="fa fa-check"></i>Task 2 - ROC cross-validation</a></li>
+<li class="chapter" data-level="" data-path="cross-validation.html"><a href="cross-validation.html#task-3---classification"><i class="fa fa-check"></i>Task 3 - Classification</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="cross-validation.html"><a href="cross-validation.html#cv.exerc"><i class="fa fa-check"></i><b>2.4</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><center><a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><img src="usyd2.gif" width="60%"></a> <small>© A.Teixeira-Pinto, University of Sydney, 2021</small></center></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="../_book">Machine Learning for Biostatistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cross-validation" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Cross-validation<a href="cross-validation.html#cross-validation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="cv.intro" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Introduction<a href="cross-validation.html#cv.intro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When assessing the performance of a model in the same data that was used to
+fit the model, we will be overestimating the model performance. A better
+strategy is to initially split the data and use one part to fit the model and
+the other one to test it. In machine learning terminology the data used to fit
+the model is called the <strong>training data</strong> and the data used to assess the model
+performance is called <strong>testing data</strong>.</p>
+<p>The cross-validation is a repetition of the process above but each time we
+use a different split of the data. This will result in several measures of
+performance obtained in each split combination. The final performance
+statistics is obtained by averaging all results of the different splits.</p>
+<p><iframe width="784" height="441" src="https://www.youtube.com/embed/QrcYxR5fd-w" 
+ frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; 
+ picture-in-picture" allowfullscreen></iframe></p>
+</div>
+<div id="cv.read" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Readings<a href="cross-validation.html#cv.read" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Read the following chapter of <em>An introduction to statistical learning</em>:</p>
+<ul>
+<li>5.1 Cross-validation</li>
+</ul>
+</div>
+<div id="cv.prac" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Practice session<a href="cross-validation.html#cv.prac" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="task-1---cross-validated-mse-and-r2" class="section level3 unnumbered hasAnchor">
+<h3>Task 1 - Cross-validated MSE and R<sup>2</sup><a href="cross-validation.html#task-1---cross-validated-mse-and-r2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We will be using the
+<a href="https://www.dropbox.com/s/7wjsfdaf0wt2kg2/bmd.csv?dl=1">bmd.csv</a>
+dataset to fit a linear model for <em>bmd</em> using <em>age</em>, <em>sex</em> and <em>bmi</em>,
+and compute the cross-validated MSE and <span class="math inline">\(R^2\)</span>.
+We will fit the model with main effects using 10 times a 5-fold cross-validation.</p>
+<p>We will use the tools from the <strong>caret</strong> package.
+This is a powerful package that wraps several methods for regression and
+classification: <a href="http://topepo.github.io/caret/index.html">manual</a></p>
+<iframe width="784" height="441" src="https://www.youtube.com/embed/1FuZCTjNPDU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; 
+picture-in-picture" allowfullscreen>
+</iframe>
+<p><code></code></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="cross-validation.html#cb24-1" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb24-2"><a href="cross-validation.html#cb24-2" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co">#library for Machine Learning</span></span>
+<span id="cb24-3"><a href="cross-validation.html#cb24-3" tabindex="-1"></a><span class="fu">library</span>(boot)  <span class="co">#library for bootstrap</span></span>
+<span id="cb24-4"><a href="cross-validation.html#cb24-4" tabindex="-1"></a><span class="fu">library</span>(pROC)  <span class="co">#library for the ROC curve</span></span>
+<span id="cb24-5"><a href="cross-validation.html#cb24-5" tabindex="-1"></a><span class="fu">library</span>(Rmisc) <span class="co">#CI() function to compute the conf interval for the mean</span></span>
+<span id="cb24-6"><a href="cross-validation.html#cb24-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1974</span>)</span>
+<span id="cb24-7"><a href="cross-validation.html#cb24-7" tabindex="-1"></a><span class="co">#the option stringsAsFactors = TRUE in the command below converts </span></span>
+<span id="cb24-8"><a href="cross-validation.html#cb24-8" tabindex="-1"></a><span class="co">#string variables as sex into factor variables</span></span>
+<span id="cb24-9"><a href="cross-validation.html#cb24-9" tabindex="-1"></a>bmd.data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/c6mhgatkotuze8o/bmd.csv?dl=1&quot;</span>, </span>
+<span id="cb24-10"><a href="cross-validation.html#cb24-10" tabindex="-1"></a>                     <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-11"><a href="cross-validation.html#cb24-11" tabindex="-1"></a><span class="co">#computes the BMI</span></span>
+<span id="cb24-12"><a href="cross-validation.html#cb24-12" tabindex="-1"></a>bmd.data<span class="sc">$</span>bmi <span class="ot">&lt;-</span> bmd.data<span class="sc">$</span>weight_kg <span class="sc">/</span> (bmd.data<span class="sc">$</span>height_cm<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="cross-validation.html#cb25-1" tabindex="-1"></a>trC.lm <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(                  <span class="co">#defines the CV procedure</span></span>
+<span id="cb25-2"><a href="cross-validation.html#cb25-2" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,  <span class="co">#multiple CV</span></span>
+<span id="cb25-3"><a href="cross-validation.html#cb25-3" tabindex="-1"></a>                 <span class="at">number =</span> <span class="dv">5</span>,            <span class="co">#5-fold CV</span></span>
+<span id="cb25-4"><a href="cross-validation.html#cb25-4" tabindex="-1"></a>                 <span class="at">repeats =</span> <span class="dv">10</span>)          <span class="co">#repeats the cross validation 10 times</span></span>
+<span id="cb25-5"><a href="cross-validation.html#cb25-5" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="cross-validation.html#cb25-6" tabindex="-1"></a><span class="co">#fits the linear model with CV defined above</span></span>
+<span id="cb25-7"><a href="cross-validation.html#cb25-7" tabindex="-1"></a>model.lm <span class="ot">&lt;-</span> <span class="fu">train</span>(bmd <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> bmi, </span>
+<span id="cb25-8"><a href="cross-validation.html#cb25-8" tabindex="-1"></a>                <span class="at">data =</span> bmd.data, </span>
+<span id="cb25-9"><a href="cross-validation.html#cb25-9" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb25-10"><a href="cross-validation.html#cb25-10" tabindex="-1"></a>                <span class="at">trControl =</span> trC.lm)</span>
+<span id="cb25-11"><a href="cross-validation.html#cb25-11" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="cross-validation.html#cb25-12" tabindex="-1"></a>model.lm</span></code></pre></div>
+<pre><code>## Linear Regression 
+## 
+## 169 samples
+##   3 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold, repeated 10 times) 
+## Summary of sample sizes: 136, 135, 134, 135, 136, 136, ... 
+## Resampling results:
+## 
+##   RMSE      Rsquared  MAE      
+##   0.137992  0.331976  0.1044175
+## 
+## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="cross-validation.html#cb27-1" tabindex="-1"></a><span class="fu">summary</span>(model.lm<span class="sc">$</span>finalModel)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = .outcome ~ ., data = dat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.38207 -0.07669 -0.00654  0.07888  0.51256 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.6063945  0.0834051   7.270 1.36e-11 ***
+## age         -0.0041579  0.0008625  -4.821 3.23e-06 ***
+## sexM         0.0949602  0.0213314   4.452 1.56e-05 ***
+## bmi          0.0155913  0.0024239   6.432 1.30e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.138 on 165 degrees of freedom
+## Multiple R-squared:  0.3254, Adjusted R-squared:  0.3131 
+## F-statistic: 26.53 on 3 and 165 DF,  p-value: 4.677e-14</code></pre>
+<p><strong>TRY IT YOURSELF:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Refit the same model and evaluate the MSE and <span class="math inline">\(R^2\)</span> using leave one out (<strong>method = “LOOCV”</strong>)</li>
+</ol>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="cross-validation.html#cb29-1" tabindex="-1"></a>trC.lm.loocv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(  </span>
+<span id="cb29-2"><a href="cross-validation.html#cb29-2" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">&quot;LOOCV&quot;</span>) <span class="co"># leave on out CV</span></span>
+<span id="cb29-3"><a href="cross-validation.html#cb29-3" tabindex="-1"></a>                   </span>
+<span id="cb29-4"><a href="cross-validation.html#cb29-4" tabindex="-1"></a>model.lm2 <span class="ot">&lt;-</span> <span class="fu">train</span>(bmd <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> bmi, </span>
+<span id="cb29-5"><a href="cross-validation.html#cb29-5" tabindex="-1"></a>                <span class="at">data =</span> bmd.data, <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb29-6"><a href="cross-validation.html#cb29-6" tabindex="-1"></a>                <span class="at">trControl =</span> trC.lm.loocv)</span>
+<span id="cb29-7"><a href="cross-validation.html#cb29-7" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="cross-validation.html#cb29-8" tabindex="-1"></a>model.lm2</span>
+<span id="cb29-9"><a href="cross-validation.html#cb29-9" tabindex="-1"></a><span class="fu">summary</span>(model.lm2<span class="sc">$</span>finalModel)</span></code></pre></div>
+</details>
+<p>
+<p>
+<ol start="2" style="list-style-type: decimal">
+<li>Fit a k nearest neighbour regression for BMD using AGE, SEX and BMI,
+and choose the k (number of neighbours) by 10-fold cross-validation
+repeated 10 times. Also, obtain the MSE and <span class="math inline">\(R^2\)</span>.</li>
+</ol>
+<p>NOTE1: you need the make sure all the predictors are in the same scale. You can
+either use the ’<code>scale()</code> function or add <code>preProcess = c("center","scale")</code> to
+the <code>train()</code> function.</p>
+<p>NOTE2: you can either use <code>tuneLength = 20</code> to define the number of neighbours
+or <code>tuneGrid=expand.grid(k=seq(1,43,2))</code></p>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="cross-validation.html#cb30-1" tabindex="-1"></a>trC.knn <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(    </span>
+<span id="cb30-2"><a href="cross-validation.html#cb30-2" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, <span class="co"># multiple CV</span></span>
+<span id="cb30-3"><a href="cross-validation.html#cb30-3" tabindex="-1"></a>                 <span class="at">number =</span> <span class="dv">10</span>,  <span class="co">#10-fold CV</span></span>
+<span id="cb30-4"><a href="cross-validation.html#cb30-4" tabindex="-1"></a>                 <span class="at">repeats =</span> <span class="dv">10</span>)</span>
+<span id="cb30-5"><a href="cross-validation.html#cb30-5" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="cross-validation.html#cb30-6" tabindex="-1"></a>model.knn <span class="ot">&lt;-</span> <span class="fu">train</span>(bmd <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> bmi, </span>
+<span id="cb30-7"><a href="cross-validation.html#cb30-7" tabindex="-1"></a>                <span class="at">data =</span> bmd.data, <span class="at">method =</span> <span class="st">&quot;knn&quot;</span>,</span>
+<span id="cb30-8"><a href="cross-validation.html#cb30-8" tabindex="-1"></a>                <span class="at">trControl =</span> trC.knn,</span>
+<span id="cb30-9"><a href="cross-validation.html#cb30-9" tabindex="-1"></a>                <span class="at">preProcess =</span> <span class="fu">c</span>(<span class="st">&quot;center&quot;</span>,<span class="st">&quot;scale&quot;</span>),</span>
+<span id="cb30-10"><a href="cross-validation.html#cb30-10" tabindex="-1"></a>                <span class="at">tuneLength =</span> <span class="dv">20</span>)   <span class="co">#instead of tuneLength, we could have</span></span>
+<span id="cb30-11"><a href="cross-validation.html#cb30-11" tabindex="-1"></a>                                  <span class="co">#used tuneGrid=expand.grid(k=1:40)</span></span>
+<span id="cb30-12"><a href="cross-validation.html#cb30-12" tabindex="-1"></a><span class="co"># Model Summary</span></span>
+<span id="cb30-13"><a href="cross-validation.html#cb30-13" tabindex="-1"></a>model.knn</span>
+<span id="cb30-14"><a href="cross-validation.html#cb30-14" tabindex="-1"></a>model.knn<span class="sc">$</span>results</span>
+<span id="cb30-15"><a href="cross-validation.html#cb30-15" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="cross-validation.html#cb30-16" tabindex="-1"></a><span class="co">#results in each cv-fold</span></span>
+<span id="cb30-17"><a href="cross-validation.html#cb30-17" tabindex="-1"></a>model.knn<span class="sc">$</span>resample</span>
+<span id="cb30-18"><a href="cross-validation.html#cb30-18" tabindex="-1"></a><span class="fu">plot</span>(model.knn)</span></code></pre></div>
+<img src="_main_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+</details>
+<p>
+<p>
+</div>
+<div id="task-2---roc-cross-validation" class="section level3 unnumbered hasAnchor">
+<h3>Task 2 - ROC cross-validation<a href="cross-validation.html#task-2---roc-cross-validation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We want to fit the following model <strong>logit(fracture) ~ age + sex + bmi +bmd</strong>
+and assess its performance by computing the area under the ROC curve
+using cross-validation</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="cross-validation.html#cb31-1" tabindex="-1"></a><span class="co">#caret does not like the category &quot;no fracture&quot;</span></span>
+<span id="cb31-2"><a href="cross-validation.html#cb31-2" tabindex="-1"></a><span class="co">#because of the space</span></span>
+<span id="cb31-3"><a href="cross-validation.html#cb31-3" tabindex="-1"></a><span class="co">#We are creating a new label for the categories</span></span>
+<span id="cb31-4"><a href="cross-validation.html#cb31-4" tabindex="-1"></a>bmd.data<span class="sc">$</span>fract <span class="ot">&lt;-</span> <span class="fu">ifelse</span> (bmd.data<span class="sc">$</span>fracture <span class="sc">==</span><span class="st">&quot;fracture&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;NF&quot;</span>)</span>
+<span id="cb31-5"><a href="cross-validation.html#cb31-5" tabindex="-1"></a>bmd.data<span class="sc">$</span>fract <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(bmd.data<span class="sc">$</span>fract)</span>
+<span id="cb31-6"><a href="cross-validation.html#cb31-6" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="cross-validation.html#cb31-7" tabindex="-1"></a>trC <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
+<span id="cb31-8"><a href="cross-validation.html#cb31-8" tabindex="-1"></a>            <span class="at">method =</span> <span class="st">&quot;cv&quot;</span>,     <span class="co">#just 1 CV</span></span>
+<span id="cb31-9"><a href="cross-validation.html#cb31-9" tabindex="-1"></a>            <span class="at">number =</span> <span class="dv">10</span>,       <span class="co">#10-fold CV</span></span>
+<span id="cb31-10"><a href="cross-validation.html#cb31-10" tabindex="-1"></a>            <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-11"><a href="cross-validation.html#cb31-11" tabindex="-1"></a>            <span class="at">summaryFunction =</span> twoClassSummary,</span>
+<span id="cb31-12"><a href="cross-validation.html#cb31-12" tabindex="-1"></a>            <span class="at">savePred =</span><span class="cn">TRUE</span>)  <span class="co">#to be used in the confusion matrix</span></span>
+<span id="cb31-13"><a href="cross-validation.html#cb31-13" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="cross-validation.html#cb31-14" tabindex="-1"></a>model.LR <span class="ot">&lt;-</span> <span class="fu">train</span>(fract <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> bmi <span class="sc">+</span> bmd , </span>
+<span id="cb31-15"><a href="cross-validation.html#cb31-15" tabindex="-1"></a>                <span class="at">data =</span> bmd.data, <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>,</span>
+<span id="cb31-16"><a href="cross-validation.html#cb31-16" tabindex="-1"></a>                <span class="at">family=</span><span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb31-17"><a href="cross-validation.html#cb31-17" tabindex="-1"></a>                <span class="at">trControl =</span> trC,</span>
+<span id="cb31-18"><a href="cross-validation.html#cb31-18" tabindex="-1"></a>                <span class="at">metric =</span> <span class="st">&quot;ROC&quot;</span>)</span>
+<span id="cb31-19"><a href="cross-validation.html#cb31-19" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="cross-validation.html#cb31-20" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="cross-validation.html#cb31-21" tabindex="-1"></a><span class="co"># Model Summary</span></span>
+<span id="cb31-22"><a href="cross-validation.html#cb31-22" tabindex="-1"></a>model.LR</span></code></pre></div>
+<pre><code>## Generalized Linear Model 
+## 
+## 169 samples
+##   4 predictor
+##   2 classes: &#39;F&#39;, &#39;NF&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 152, 152, 152, 152, 152, 152, ... 
+## Resampling results:
+## 
+##   ROC        Sens  Spec     
+##   0.8980303  0.72  0.9166667</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="cross-validation.html#cb33-1" tabindex="-1"></a>model.LR<span class="sc">$</span>results</span></code></pre></div>
+<pre><code>##   parameter       ROC Sens      Spec     ROCSD    SensSD     SpecSD
+## 1      none 0.8980303 0.72 0.9166667 0.1362458 0.1686548 0.09622504</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="cross-validation.html#cb35-1" tabindex="-1"></a><span class="co">#results in each cv-fold</span></span>
+<span id="cb35-2"><a href="cross-validation.html#cb35-2" tabindex="-1"></a>model.LR<span class="sc">$</span>resample</span></code></pre></div>
+<pre><code>##          ROC Sens      Spec Resample
+## 1  0.9500000  0.6 1.0000000   Fold01
+## 2  0.7500000  0.6 0.9166667   Fold02
+## 3  0.9666667  0.6 0.9166667   Fold03
+## 4  0.9000000  0.8 1.0000000   Fold04
+## 5  0.5666667  0.6 0.6666667   Fold05
+## 6  0.9666667  1.0 0.9166667   Fold06
+## 7  0.9636364  0.6 1.0000000   Fold07
+## 8  0.9833333  0.8 0.9166667   Fold08
+## 9  0.9333333  0.6 0.9166667   Fold09
+## 10 1.0000000  1.0 0.9166667   Fold10</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="cross-validation.html#cb37-1" tabindex="-1"></a><span class="co">#Confusion matrix cross-validated</span></span>
+<span id="cb37-2"><a href="cross-validation.html#cb37-2" tabindex="-1"></a><span class="fu">confusionMatrix</span>(model.LR)</span></code></pre></div>
+<pre><code>## Cross-Validated (10 fold) Confusion Matrix 
+## 
+## (entries are percentual average cell counts across resamples)
+##  
+##           Reference
+## Prediction    F   NF
+##         F  21.3  5.9
+##         NF  8.3 64.5
+##                            
+##  Accuracy (average) : 0.858</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="cross-validation.html#cb39-1" tabindex="-1"></a><span class="co">#Confusion matrix for the final model</span></span>
+<span id="cb39-2"><a href="cross-validation.html#cb39-2" tabindex="-1"></a>pred.LR  <span class="ot">&lt;-</span> <span class="fu">predict</span>(model.LR)</span>
+<span id="cb39-3"><a href="cross-validation.html#cb39-3" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">data=</span>pred.LR, <span class="at">reference=</span>bmd.data<span class="sc">$</span>fract)</span></code></pre></div>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   F  NF
+##         F   35   9
+##         NF  15 110
+##                                           
+##                Accuracy : 0.858           
+##                  95% CI : (0.7961, 0.9068)
+##     No Information Rate : 0.7041          
+##     P-Value [Acc &gt; NIR] : 2.272e-06       
+##                                           
+##                   Kappa : 0.6469          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.3074          
+##                                           
+##             Sensitivity : 0.7000          
+##             Specificity : 0.9244          
+##          Pos Pred Value : 0.7955          
+##          Neg Pred Value : 0.8800          
+##              Prevalence : 0.2959          
+##          Detection Rate : 0.2071          
+##    Detection Prevalence : 0.2604          
+##       Balanced Accuracy : 0.8122          
+##                                           
+##        &#39;Positive&#39; Class : F               
+## </code></pre>
+<p><strong>TRY IT YOURSELF</strong></p>
+<ol style="list-style-type: decimal">
+<li>Use the KNN algorithm to predict <strong>fracture</strong> based on the same variables
+of the logistic model above, by choosing the <em>k</em> using cross-validation and
+compute the area under the ROC.</li>
+</ol>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="cross-validation.html#cb41-1" tabindex="-1"></a>trC.knn <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
+<span id="cb41-2"><a href="cross-validation.html#cb41-2" tabindex="-1"></a>            <span class="at">method =</span> <span class="st">&quot;cv&quot;</span>,     <span class="co">#just 1 CV</span></span>
+<span id="cb41-3"><a href="cross-validation.html#cb41-3" tabindex="-1"></a>            <span class="at">number =</span> <span class="dv">10</span>,       <span class="co">#10-fold CV</span></span>
+<span id="cb41-4"><a href="cross-validation.html#cb41-4" tabindex="-1"></a>            <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb41-5"><a href="cross-validation.html#cb41-5" tabindex="-1"></a>            <span class="at">summaryFunction =</span> twoClassSummary,</span>
+<span id="cb41-6"><a href="cross-validation.html#cb41-6" tabindex="-1"></a>            <span class="at">savePred =</span><span class="cn">TRUE</span>)  <span class="co">#to be used in the confusion matrix</span></span>
+<span id="cb41-7"><a href="cross-validation.html#cb41-7" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="cross-validation.html#cb41-8" tabindex="-1"></a>model.knn <span class="ot">&lt;-</span> <span class="fu">train</span>(fract <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> bmi <span class="sc">+</span> bmd , </span>
+<span id="cb41-9"><a href="cross-validation.html#cb41-9" tabindex="-1"></a>                <span class="at">data =</span> bmd.data, <span class="at">method =</span> <span class="st">&quot;knn&quot;</span>,</span>
+<span id="cb41-10"><a href="cross-validation.html#cb41-10" tabindex="-1"></a>                <span class="at">trControl =</span> trC.knn,</span>
+<span id="cb41-11"><a href="cross-validation.html#cb41-11" tabindex="-1"></a>                <span class="at">tuneLength =</span> <span class="dv">30</span>,</span>
+<span id="cb41-12"><a href="cross-validation.html#cb41-12" tabindex="-1"></a>                <span class="at">preProcess =</span> <span class="fu">c</span>(<span class="st">&quot;center&quot;</span>,<span class="st">&quot;scale&quot;</span>),</span>
+<span id="cb41-13"><a href="cross-validation.html#cb41-13" tabindex="-1"></a>                <span class="at">metric =</span> <span class="st">&quot;ROC&quot;</span>)</span>
+<span id="cb41-14"><a href="cross-validation.html#cb41-14" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="cross-validation.html#cb41-15" tabindex="-1"></a></span>
+<span id="cb41-16"><a href="cross-validation.html#cb41-16" tabindex="-1"></a><span class="co"># Model Summary</span></span>
+<span id="cb41-17"><a href="cross-validation.html#cb41-17" tabindex="-1"></a>model.knn</span>
+<span id="cb41-18"><a href="cross-validation.html#cb41-18" tabindex="-1"></a><span class="fu">plot</span>(model.knn)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="cross-validation.html#cb42-1" tabindex="-1"></a>model.knn<span class="sc">$</span>results</span>
+<span id="cb42-2"><a href="cross-validation.html#cb42-2" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="cross-validation.html#cb42-3" tabindex="-1"></a><span class="co">#results in each cv-fold</span></span>
+<span id="cb42-4"><a href="cross-validation.html#cb42-4" tabindex="-1"></a>model.knn<span class="sc">$</span>resample</span>
+<span id="cb42-5"><a href="cross-validation.html#cb42-5" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="cross-validation.html#cb42-6" tabindex="-1"></a><span class="co">#Confusion matrix cross-validated</span></span>
+<span id="cb42-7"><a href="cross-validation.html#cb42-7" tabindex="-1"></a><span class="fu">confusionMatrix</span>(model.knn)</span>
+<span id="cb42-8"><a href="cross-validation.html#cb42-8" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="cross-validation.html#cb42-9" tabindex="-1"></a><span class="co">#Confusion matrix for the final model</span></span>
+<span id="cb42-10"><a href="cross-validation.html#cb42-10" tabindex="-1"></a>pred.knn  <span class="ot">&lt;-</span> <span class="fu">predict</span>(model.knn)</span>
+<span id="cb42-11"><a href="cross-validation.html#cb42-11" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">data=</span>pred.knn, <span class="at">reference=</span>bmd.data<span class="sc">$</span>fract)</span></code></pre></div>
+</details>
+<p>
+<p>
+</div>
+<div id="task-3---classification" class="section level3 unnumbered hasAnchor">
+<h3>Task 3 - Classification<a href="cross-validation.html#task-3---classification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Read the dataset <a href="https://www.dropbox.com/s/wg32uj43fsy9yvd/SBI.csv?dl=0">SBI.csv</a>
+and create a prediction model for the outcome “sbi” using “age”, “pct”, “crp”,
+“wcc” and “fever_hours” as predictors (you can read.</p>
+<p>Let’s first read the data in</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="cross-validation.html#cb43-1" tabindex="-1"></a>sbi.data     <span class="ot">&lt;-</span> </span>
+<span id="cb43-2"><a href="cross-validation.html#cb43-2" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/wg32uj43fsy9yvd/SBI.csv?dl=1&quot;</span>, </span>
+<span id="cb43-3"><a href="cross-validation.html#cb43-3" tabindex="-1"></a>           <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb43-4"><a href="cross-validation.html#cb43-4" tabindex="-1"></a><span class="fu">summary</span>(sbi.data)</span></code></pre></div>
+<pre><code>##        X                id          fever_hours           age        sex     
+##  Min.   :   1.0   Min.   :   495   Min.   :   0.00   Min.   :0.010   F:1013  
+##  1st Qu.: 587.8   1st Qu.:133039   1st Qu.:  24.00   1st Qu.:0.760   M:1335  
+##  Median :1174.5   Median :160016   Median :  48.00   Median :1.525           
+##  Mean   :1174.5   Mean   :153698   Mean   :  80.06   Mean   :1.836           
+##  3rd Qu.:1761.2   3rd Qu.:196030   3rd Qu.:  78.00   3rd Qu.:2.752           
+##  Max.   :2348.0   Max.   :229986   Max.   :3360.00   Max.   :4.990           
+##       wcc          prevAB                sbi            pct           
+##  Min.   : 0.2368   No :1370   Bact         :  34   Min.   :  0.00865  
+##  1st Qu.: 7.9000   Yes: 978   NotApplicable:1752   1st Qu.:  0.16000  
+##  Median :11.6000              Pneu         : 251   Median :  0.76000  
+##  Mean   :12.6431              UTI          : 311   Mean   :  3.74354  
+##  3rd Qu.:16.1000                                   3rd Qu.:  4.61995  
+##  Max.   :58.7000                                   Max.   :156.47000  
+##       crp        
+##  Min.   :  0.00  
+##  1st Qu.: 11.83  
+##  Median : 30.97  
+##  Mean   : 48.41  
+##  3rd Qu.: 66.20  
+##  Max.   :429.90</code></pre>
+<p>We will try different approaches starting with linear discriminant analysis</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="cross-validation.html#cb45-1" tabindex="-1"></a>trCtrl.lda <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,</span>
+<span id="cb45-2"><a href="cross-validation.html#cb45-2" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>,  <span class="co">#10-fold CV</span></span>
+<span id="cb45-3"><a href="cross-validation.html#cb45-3" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="dv">10</span>,</span>
+<span id="cb45-4"><a href="cross-validation.html#cb45-4" tabindex="-1"></a>                           <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb45-5"><a href="cross-validation.html#cb45-5" tabindex="-1"></a>                           <span class="at">savePredictions =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-6"><a href="cross-validation.html#cb45-6" tabindex="-1"></a>model.lda <span class="ot">&lt;-</span> <span class="fu">train</span>(sbi <span class="sc">~</span> crp<span class="sc">+</span>pct<span class="sc">+</span>age<span class="sc">+</span>wcc<span class="sc">+</span>fever_hours, </span>
+<span id="cb45-7"><a href="cross-validation.html#cb45-7" tabindex="-1"></a>                   <span class="at">data=</span>sbi.data, </span>
+<span id="cb45-8"><a href="cross-validation.html#cb45-8" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">&quot;lda&quot;</span>,</span>
+<span id="cb45-9"><a href="cross-validation.html#cb45-9" tabindex="-1"></a>                   <span class="at">trControl =</span> trCtrl.lda,</span>
+<span id="cb45-10"><a href="cross-validation.html#cb45-10" tabindex="-1"></a>                   <span class="at">metric=</span><span class="st">&quot;Accuracy&quot;</span> )</span>
+<span id="cb45-11"><a href="cross-validation.html#cb45-11" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="cross-validation.html#cb45-12" tabindex="-1"></a>model.lda<span class="sc">$</span>results</span></code></pre></div>
+<pre><code>##   parameter  Accuracy      Kappa AccuracySD    KappaSD
+## 1      none 0.7478769 0.09311667 0.01071987 0.04376718</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="cross-validation.html#cb47-1" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(model.lda), sbi.data<span class="sc">$</span>sbi)</span></code></pre></div>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                Reference
+## Prediction      Bact NotApplicable Pneu  UTI
+##   Bact             5             5    7    6
+##   NotApplicable   28          1722  238  273
+##   Pneu             0             3    2    1
+##   UTI              1            22    4   31
+## 
+## Overall Statistics
+##                                          
+##                Accuracy : 0.7496         
+##                  95% CI : (0.7315, 0.767)
+##     No Information Rate : 0.7462         
+##     P-Value [Acc &gt; NIR] : 0.3623         
+##                                          
+##                   Kappa : 0.0985         
+##                                          
+##  Mcnemar&#39;s Test P-Value : &lt;2e-16         
+## 
+## Statistics by Class:
+## 
+##                      Class: Bact Class: NotApplicable Class: Pneu Class: UTI
+## Sensitivity             0.147059              0.98288   0.0079681    0.09968
+## Specificity             0.992221              0.09564   0.9980925    0.98675
+## Pos Pred Value          0.217391              0.76161   0.3333333    0.53448
+## Neg Pred Value          0.987527              0.65517   0.8936806    0.87773
+## Prevalence              0.014480              0.74617   0.1068995    0.13245
+## Detection Rate          0.002129              0.73339   0.0008518    0.01320
+## Detection Prevalence    0.009796              0.96295   0.0025554    0.02470
+## Balanced Accuracy       0.569640              0.53926   0.5030303    0.54321</code></pre>
+<p>Now, let’s try the logistic regression</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="cross-validation.html#cb49-1" tabindex="-1"></a>trCtrl.lr <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,</span>
+<span id="cb49-2"><a href="cross-validation.html#cb49-2" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>,  <span class="co">#10-fold CV</span></span>
+<span id="cb49-3"><a href="cross-validation.html#cb49-3" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="dv">10</span>,</span>
+<span id="cb49-4"><a href="cross-validation.html#cb49-4" tabindex="-1"></a>                           <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb49-5"><a href="cross-validation.html#cb49-5" tabindex="-1"></a>                           <span class="at">savePredictions =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-6"><a href="cross-validation.html#cb49-6" tabindex="-1"></a>model.lr <span class="ot">&lt;-</span> <span class="fu">train</span>(sbi <span class="sc">~</span> crp<span class="sc">+</span>pct<span class="sc">+</span>age<span class="sc">+</span>wcc<span class="sc">+</span>fever_hours, </span>
+<span id="cb49-7"><a href="cross-validation.html#cb49-7" tabindex="-1"></a>                   <span class="at">data=</span>sbi.data, </span>
+<span id="cb49-8"><a href="cross-validation.html#cb49-8" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">&quot;multinom&quot;</span>,</span>
+<span id="cb49-9"><a href="cross-validation.html#cb49-9" tabindex="-1"></a>                   <span class="at">trControl =</span> trCtrl.lr,</span>
+<span id="cb49-10"><a href="cross-validation.html#cb49-10" tabindex="-1"></a>                   <span class="at">tuneLength=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="cross-validation.html#cb50-1" tabindex="-1"></a>model.lr<span class="sc">$</span>results</span></code></pre></div>
+<pre><code>##   decay  Accuracy      Kappa  AccuracySD    KappaSD
+## 1     0 0.7516195 0.09927548 0.008932933 0.04049479</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="cross-validation.html#cb52-1" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(model.lr), sbi.data<span class="sc">$</span>sbi)</span></code></pre></div>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                Reference
+## Prediction      Bact NotApplicable Pneu  UTI
+##   Bact             0             1    1    0
+##   NotApplicable   27          1727  241  270
+##   Pneu             1             2    2    4
+##   UTI              6            22    7   37
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.7521          
+##                  95% CI : (0.7341, 0.7695)
+##     No Information Rate : 0.7462          
+##     P-Value [Acc &gt; NIR] : 0.2618          
+##                                           
+##                   Kappa : 0.101           
+##                                           
+##  Mcnemar&#39;s Test P-Value : &lt;2e-16          
+## 
+## Statistics by Class:
+## 
+##                      Class: Bact Class: NotApplicable Class: Pneu Class: UTI
+## Sensitivity            0.0000000              0.98573   0.0079681    0.11897
+## Specificity            0.9991357              0.09732   0.9966619    0.98282
+## Pos Pred Value         0.0000000              0.76247   0.2222222    0.51389
+## Neg Pred Value         0.9855072              0.69880   0.8935442    0.87961
+## Prevalence             0.0144804              0.74617   0.1068995    0.13245
+## Detection Rate         0.0000000              0.73552   0.0008518    0.01576
+## Detection Prevalence   0.0008518              0.96465   0.0038330    0.03066
+## Balanced Accuracy      0.4995678              0.54152   0.5023150    0.55089</code></pre>
+<p>And finally, knn.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="cross-validation.html#cb54-1" tabindex="-1"></a>trCtrl.knn <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,</span>
+<span id="cb54-2"><a href="cross-validation.html#cb54-2" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>,  <span class="co">#10-fold CV</span></span>
+<span id="cb54-3"><a href="cross-validation.html#cb54-3" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="dv">10</span>,</span>
+<span id="cb54-4"><a href="cross-validation.html#cb54-4" tabindex="-1"></a>                           <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb54-5"><a href="cross-validation.html#cb54-5" tabindex="-1"></a>                           <span class="at">savePredictions =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb54-6"><a href="cross-validation.html#cb54-6" tabindex="-1"></a>model.knn <span class="ot">&lt;-</span> <span class="fu">train</span>(sbi <span class="sc">~</span> crp<span class="sc">+</span>pct<span class="sc">+</span>age<span class="sc">+</span>wcc<span class="sc">+</span>fever_hours, </span>
+<span id="cb54-7"><a href="cross-validation.html#cb54-7" tabindex="-1"></a>                   <span class="at">data=</span>sbi.data, </span>
+<span id="cb54-8"><a href="cross-validation.html#cb54-8" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">&quot;knn&quot;</span>,</span>
+<span id="cb54-9"><a href="cross-validation.html#cb54-9" tabindex="-1"></a>                   <span class="at">trControl =</span> trCtrl.knn,</span>
+<span id="cb54-10"><a href="cross-validation.html#cb54-10" tabindex="-1"></a>                   <span class="at">preProcess =</span> <span class="fu">c</span>(<span class="st">&quot;center&quot;</span>,<span class="st">&quot;scale&quot;</span>),</span>
+<span id="cb54-11"><a href="cross-validation.html#cb54-11" tabindex="-1"></a>                   <span class="at">tuneLength=</span><span class="dv">20</span>)</span>
+<span id="cb54-12"><a href="cross-validation.html#cb54-12" tabindex="-1"></a></span>
+<span id="cb54-13"><a href="cross-validation.html#cb54-13" tabindex="-1"></a><span class="fu">plot</span>(model.knn)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="cross-validation.html#cb55-1" tabindex="-1"></a>model.knn</span></code></pre></div>
+<pre><code>## k-Nearest Neighbors 
+## 
+## 2348 samples
+##    5 predictor
+##    4 classes: &#39;Bact&#39;, &#39;NotApplicable&#39;, &#39;Pneu&#39;, &#39;UTI&#39; 
+## 
+## Pre-processing: centered (5), scaled (5) 
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 2114, 2114, 2113, 2114, 2113, 2112, ... 
+## Resampling results across tuning parameters:
+## 
+##   k   Accuracy   Kappa     
+##    5  0.7175953  0.12171412
+##    7  0.7339458  0.12278852
+##    9  0.7363738  0.10479303
+##   11  0.7413980  0.10979312
+##   13  0.7407610  0.09426706
+##   15  0.7444609  0.09148660
+##   17  0.7460360  0.08657437
+##   19  0.7465912  0.08561247
+##   21  0.7474448  0.08364397
+##   23  0.7489325  0.08502779
+##   25  0.7507663  0.08610948
+##   27  0.7500005  0.07935699
+##   29  0.7494477  0.07417419
+##   31  0.7492342  0.07113888
+##   33  0.7488938  0.06312317
+##   35  0.7490229  0.05901425
+##   37  0.7484635  0.05259630
+##   39  0.7481255  0.04619287
+##   41  0.7482135  0.04377731
+##   43  0.7480011  0.04061429
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was k = 25.</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="cross-validation.html#cb57-1" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(model.knn), sbi.data<span class="sc">$</span>sbi)</span></code></pre></div>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                Reference
+## Prediction      Bact NotApplicable Pneu  UTI
+##   Bact             0             1    0    0
+##   NotApplicable   29          1727  244  264
+##   Pneu             0             1    2    1
+##   UTI              5            23    5   46
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.756           
+##                  95% CI : (0.7381, 0.7732)
+##     No Information Rate : 0.7462          
+##     P-Value [Acc &gt; NIR] : 0.1429          
+##                                           
+##                   Kappa : 0.1154          
+##                                           
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: Bact Class: NotApplicable Class: Pneu Class: UTI
+## Sensitivity            0.0000000              0.98573   0.0079681    0.14791
+## Specificity            0.9995678              0.09899   0.9990463    0.98380
+## Pos Pred Value         0.0000000              0.76281   0.5000000    0.58228
+## Neg Pred Value         0.9855134              0.70238   0.8937713    0.88321
+## Prevalence             0.0144804              0.74617   0.1068995    0.13245
+## Detection Rate         0.0000000              0.73552   0.0008518    0.01959
+## Detection Prevalence   0.0004259              0.96422   0.0017036    0.03365
+## Balanced Accuracy      0.4997839              0.54236   0.5035072    0.56585</code></pre>
+</div>
+</div>
+<div id="cv.exerc" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Exercises<a href="cross-validation.html#cv.exerc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>What are the advantages and disadvantages of k-fold cross-
+validation relative to the validation set approach? And LOOCV?</li>
+</ol>
+<details>
+<summary>
+<em>See the solution</em>
+</summary>
+<p><em>The validation set approach is conceptually simple and easily implemented as you are simply partitioning the existing training data into two sets. However, there are two drawbacks: (1.) the estimate of the test error rate can be highly variable depending on which observations are included in the training and validation sets. (2.) the validation set error rate may tend to overestimate the test error rate for the model fit on the entire data set.</em></p>
+<p><em>LOOCV is a special case of k-fold cross-validation with k = n. Thus, LOOCV is the most computationally intense method since the model must be fit n times. Also, LOOCV has higher variance, but lower bias, than k-fold CV.</em></p>
+</details>
+<p>
+<p>
+<ol start="2" style="list-style-type: decimal">
+<li>Load the dataset <em>PimaIndiansDiabetes</em> in the package <em>mlbench</em> (you might need
+to install this package). This dataset consists of 768 observations
+of 9 variables: 8 variables which will be used as model
+predictors (number of times pregnant, plasma glucose concentration, diastolic blood pressure (mm Hg), triceps skin fold thickness (in mm), 2-hr serum insulin measure, body mass index, a diabetes pedigree function, and age) and 1 outcome variable (whether or not the patient has diabetes).<br />
+Use the KNN algorithm to predict diabetes using all the predictors available.
+Choose the number of neighbours using cross-validation</li>
+</ol>
+<details>
+<summary>
+<em>See the solution code</em>
+</summary>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="cross-validation.html#cb59-1" tabindex="-1"></a><span class="co">#install.packages(&quot;mlbench&quot;)</span></span>
+<span id="cb59-2"><a href="cross-validation.html#cb59-2" tabindex="-1"></a><span class="fu">library</span>(mlbench)</span>
+<span id="cb59-3"><a href="cross-validation.html#cb59-3" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb59-4"><a href="cross-validation.html#cb59-4" tabindex="-1"></a><span class="fu">library</span>(class)</span>
+<span id="cb59-5"><a href="cross-validation.html#cb59-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1999</span>)</span>
+<span id="cb59-6"><a href="cross-validation.html#cb59-6" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="cross-validation.html#cb59-7" tabindex="-1"></a><span class="fu">data</span>(PimaIndiansDiabetes)</span>
+<span id="cb59-8"><a href="cross-validation.html#cb59-8" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="cross-validation.html#cb59-9" tabindex="-1"></a></span>
+<span id="cb59-10"><a href="cross-validation.html#cb59-10" tabindex="-1"></a>trCtrl.knn.diab <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,</span>
+<span id="cb59-11"><a href="cross-validation.html#cb59-11" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>,  <span class="co">#10-fold CV</span></span>
+<span id="cb59-12"><a href="cross-validation.html#cb59-12" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="dv">10</span>,</span>
+<span id="cb59-13"><a href="cross-validation.html#cb59-13" tabindex="-1"></a>                           <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb59-14"><a href="cross-validation.html#cb59-14" tabindex="-1"></a>                           <span class="at">savePredictions =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb59-15"><a href="cross-validation.html#cb59-15" tabindex="-1"></a></span>
+<span id="cb59-16"><a href="cross-validation.html#cb59-16" tabindex="-1"></a>model.knn.diab  <span class="ot">&lt;-</span> <span class="fu">train</span>(diabetes <span class="sc">~</span> ., </span>
+<span id="cb59-17"><a href="cross-validation.html#cb59-17" tabindex="-1"></a>                   <span class="at">data =</span> PimaIndiansDiabetes, </span>
+<span id="cb59-18"><a href="cross-validation.html#cb59-18" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">&quot;knn&quot;</span>,</span>
+<span id="cb59-19"><a href="cross-validation.html#cb59-19" tabindex="-1"></a>                   <span class="at">trControl =</span> trCtrl.knn.diab,</span>
+<span id="cb59-20"><a href="cross-validation.html#cb59-20" tabindex="-1"></a>                   <span class="at">tuneLength=</span><span class="dv">20</span>,</span>
+<span id="cb59-21"><a href="cross-validation.html#cb59-21" tabindex="-1"></a>                   <span class="at">preProcess =</span> <span class="fu">c</span>(<span class="st">&quot;center&quot;</span>,<span class="st">&quot;scale&quot;</span>))</span>
+<span id="cb59-22"><a href="cross-validation.html#cb59-22" tabindex="-1"></a>model.knn.diab</span></code></pre></div>
+<pre><code>## k-Nearest Neighbors 
+## 
+## 768 samples
+##   8 predictor
+##   2 classes: &#39;neg&#39;, &#39;pos&#39; 
+## 
+## Pre-processing: centered (8), scaled (8) 
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 691, 691, 691, 691, 691, 692, ... 
+## Resampling results across tuning parameters:
+## 
+##   k   Accuracy   Kappa    
+##    5  0.7389029  0.4053295
+##    7  0.7394224  0.4047962
+##    9  0.7468267  0.4180659
+##   11  0.7434604  0.4096912
+##   13  0.7364081  0.3904171
+##   15  0.7416251  0.3977650
+##   17  0.7485424  0.4127157
+##   19  0.7541388  0.4228489
+##   21  0.7557040  0.4227617
+##   23  0.7588295  0.4297422
+##   25  0.7515396  0.4093277
+##   27  0.7471087  0.3962969
+##   29  0.7489388  0.3985084
+##   31  0.7505024  0.4013708
+##   33  0.7534979  0.4066469
+##   35  0.7541490  0.4071122
+##   37  0.7521787  0.4003432
+##   39  0.7513807  0.3975556
+##   41  0.7530776  0.3995618
+##   43  0.7523086  0.3964125
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was k = 23.</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="cross-validation.html#cb61-1" tabindex="-1"></a><span class="fu">plot</span>(model.knn.diab)</span></code></pre></div>
+<img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+</details>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="bootstrap.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

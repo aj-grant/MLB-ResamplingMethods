@@ -1,0 +1,10 @@
+bootstrap
+boot.intro
+boot.read
+boot.prac
+boot.exerc
+cross-validation
+cv.intro
+cv.read
+cv.prac
+cv.exerc
