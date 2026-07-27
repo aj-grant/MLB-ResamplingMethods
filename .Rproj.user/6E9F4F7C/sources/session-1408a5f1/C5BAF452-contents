@@ -1,0 +1,354 @@
+# Cross-validation
+
+## Introduction {#cv.intro}
+
+  When assessing the performance of a model in the same data that was used to 
+  fit the model, we will be overestimating the model performance. A better 
+  strategy is to initially split the data and use one part to fit the model and
+  the other one to test it. In machine learning terminology the data used to fit
+  the model is called the **training data** and the data used to assess the model 
+  performance is called the **testing data**.
+  
+  The cross-validation is a repetition of the process above but each time we 
+  use a different split of the data. This will result in several measures of
+  performance obtained in each split combination. The final performance 
+  statistics is obtained by averaging all results of the different splits.
+  
+ 
+  
+  
+ <iframe width="784" height="441" src="https://www.youtube.com/embed/QrcYxR5fd-w" 
+ frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; 
+ picture-in-picture" allowfullscreen></iframe>
+
+## Readings {#cv.read}
+
+Read the following chapter of *An introduction to statistical learning*: 
+
+* 5.1 Cross-validation
+
+
+## Practice session {#cv.prac}
+
+
+### Task 1 - Cross-validated MSE and R^2^ {-}
+
+We will be using the 
+[bmd.csv](https://www.dropbox.com/s/7wjsfdaf0wt2kg2/bmd.csv?dl=1) 
+dataset to fit a linear model for *bmd* using *age*, *sex* and *bmi*, 
+and compute the cross-validated MSE and $R^2$.
+We will fit the model with main effects using 10 times a 5-fold cross-validation. 
+
+We will use the tools from the **caret** package. 
+This is a powerful package that wraps several methods for regression and 
+classification: [manual](http://topepo.github.io/caret/index.html)
+
+
+<iframe width="784" height="441" src="https://www.youtube.com/embed/1FuZCTjNPDU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; 
+picture-in-picture" allowfullscreen></iframe>
+` `  
+
+```{r message = FALSE }
+library(e1071)
+library(caret) #library for Machine Learning
+library(boot)  #library for bootstrap
+library(pROC)  #library for the ROC curve
+library(Rmisc) #CI() function to compute the conf interval for the mean
+set.seed(1974)
+#the option stringsAsFactors = TRUE in the command below converts 
+#string variables as sex into factor variables
+bmd.data <- read.csv("https://www.dropbox.com/s/c6mhgatkotuze8o/bmd.csv?dl=1", 
+                     stringsAsFactors = TRUE)
+#computes the BMI
+bmd.data$bmi <- bmd.data$weight_kg / (bmd.data$height_cm/100)^2
+```
+
+
+```{r}
+trC.lm <- trainControl(                  #defines the CV procedure
+                 method = "repeatedcv",  #multiple CV
+                 number = 5,            #5-fold CV
+                 repeats = 10)          #repeats the cross validation 10 times
+
+#fits the linear model with CV defined above
+model.lm <- train(bmd ~ age + sex + bmi, 
+                data = bmd.data, 
+                method = "lm", 
+                trControl = trC.lm)
+
+model.lm
+summary(model.lm$finalModel)
+```
+
+**TRY IT YOURSELF:**
+
+1) Refit the same model and evaluate the MSE and $R^2$ using leave one out (**method = "LOOCV"**)
+
+<details><summary>*See the solution code*</summary>
+
+```{r results="hide"}
+trC.lm.loocv <- trainControl(  
+                 method = "LOOCV") # leave on out CV
+                   
+model.lm2 <- train(bmd ~ age + sex + bmi, 
+                data = bmd.data, method = "lm",
+                trControl = trC.lm.loocv)
+
+model.lm2
+summary(model.lm2$finalModel)
+```
+
+</details><p><p>  
+
+2)  Fit a k nearest neighbour regression for BMD using AGE, SEX and BMI, 
+and choose the k (number of neighbours) by 10-fold cross-validation 
+repeated 10 times. Also, obtain the MSE and  $R^2$. 
+
+NOTE1: you need the make sure all the predictors are in the same scale. You can
+either use the '`scale()` function or add `preProcess = c("center","scale")` to 
+the `train()` function.
+
+NOTE2: you can either use `tuneLength = 20` to define the number of neighbours 
+or ` tuneGrid=expand.grid(k=seq(1,43,2))`
+
+<details><summary>*See the solution code*</summary>
+
+```{r results="hide"} 
+trC.knn <- trainControl(    
+                 method = "repeatedcv", # multiple CV
+                 number = 10,  #10-fold CV
+                 repeats = 10)
+
+model.knn <- train(bmd ~ age + sex + bmi, 
+                data = bmd.data, method = "knn",
+                trControl = trC.knn,
+                preProcess = c("center","scale"),
+                tuneLength = 20)   #instead of tuneLength, we could have
+                                  #used tuneGrid=expand.grid(k=1:40)
+# Model Summary
+model.knn
+model.knn$results
+
+#results in each cv-fold
+model.knn$resample
+plot(model.knn)
+
+```
+</details><p><p>  
+
+### Task 2 - ROC cross-validation {-}
+
+We want to fit the following model **logit(fracture) ~ age + sex + bmi +bmd** 
+and assess its performance by computing the area under the ROC curve 
+using cross-validation
+
+```{r}
+#caret does not like the category "no fracture"
+#because of the space
+#We are creating a new label for the categories
+bmd.data$fract <- ifelse (bmd.data$fracture =="fracture", "F", "NF")
+bmd.data$fract <- as.factor(bmd.data$fract)
+
+trC <- trainControl(
+            method = "cv",     #just 1 CV
+            number = 10,       #10-fold CV
+            classProbs = TRUE,
+            summaryFunction = twoClassSummary,
+            savePred =TRUE)  #to be used in the confusion matrix
+
+model.LR <- train(fract ~ age + sex + bmi + bmd , 
+                data = bmd.data, method = "glm",
+                family="binomial",
+                trControl = trC,
+                metric = "ROC")
+
+
+# Model Summary
+model.LR
+model.LR$results
+
+#results in each cv-fold
+model.LR$resample
+
+#Confusion matrix cross-validated
+confusionMatrix(model.LR)
+
+#Confusion matrix for the final model
+pred.LR  <- predict(model.LR)
+confusionMatrix(data=pred.LR, reference=bmd.data$fract)
+
+```
+
+**TRY IT YOURSELF**
+
+1) Use the KNN algorithm to predict **fracture** based on the same variables 
+of the logistic model above, by choosing the *k* using cross-validation and 
+compute the area under the ROC.
+
+<details><summary>*See the solution code*</summary>
+
+```{r results="hide"}
+trC.knn <- trainControl(
+            method = "cv",     #just 1 CV
+            number = 10,       #10-fold CV
+            classProbs = TRUE,
+            summaryFunction = twoClassSummary,
+            savePred =TRUE)  #to be used in the confusion matrix
+
+model.knn <- train(fract ~ age + sex + bmi + bmd , 
+                data = bmd.data, method = "knn",
+                trControl = trC.knn,
+                tuneLength = 30,
+                preProcess = c("center","scale"),
+                metric = "ROC")
+
+
+# Model Summary
+model.knn
+plot(model.knn)
+model.knn$results
+
+#results in each cv-fold
+model.knn$resample
+
+#Confusion matrix cross-validated
+confusionMatrix(model.knn)
+
+#Confusion matrix for the final model
+pred.knn  <- predict(model.knn)
+confusionMatrix(data=pred.knn, reference=bmd.data$fract)
+
+```
+</details><p><p>  
+
+
+### Task 3 - Classification {-}
+
+Read the dataset [SBI.csv](https://www.dropbox.com/s/wg32uj43fsy9yvd/SBI.csv?dl=0)
+and create a prediction model for the outcome "sbi" using "age", "pct", "crp", 
+"wcc" and "fever_hours" as predictors (you can read.
+
+Let's first read the data in
+
+```{r}
+sbi.data     <- 
+  read.csv("https://www.dropbox.com/s/wg32uj43fsy9yvd/SBI.csv?dl=1", 
+           stringsAsFactors = TRUE)
+summary(sbi.data)
+```
+
+We will try different approaches starting with linear discriminant analysis
+
+```{r}
+trCtrl.lda <- trainControl(method = "repeatedcv",
+                           number = 10,  #10-fold CV
+                           repeats = 10,
+                           classProbs = TRUE,
+                           savePredictions = TRUE)
+model.lda <- train(sbi ~ crp+pct+age+wcc+fever_hours, 
+                   data=sbi.data, 
+                   method="lda",
+                   trControl = trCtrl.lda,
+                   metric="Accuracy" )
+
+model.lda$results
+confusionMatrix(predict(model.lda), sbi.data$sbi)
+```
+
+Now, let's try the logistic regression
+
+```{r results="hide"}
+trCtrl.lr <- trainControl(method = "repeatedcv",
+                           number = 10,  #10-fold CV
+                           repeats = 10,
+                           classProbs = TRUE,
+                           savePredictions = TRUE)
+model.lr <- train(sbi ~ crp+pct+age+wcc+fever_hours, 
+                   data=sbi.data, 
+                   method="multinom",
+                   trControl = trCtrl.lr,
+                   tuneLength=1)
+```
+
+```{r}
+model.lr$results
+confusionMatrix(predict(model.lr), sbi.data$sbi)
+```
+
+And finally, knn.
+
+```{r}
+trCtrl.knn <- trainControl(method = "repeatedcv",
+                           number = 10,  #10-fold CV
+                           repeats = 10,
+                           classProbs = TRUE,
+                           savePredictions = TRUE)
+model.knn <- train(sbi ~ crp+pct+age+wcc+fever_hours, 
+                   data=sbi.data, 
+                   method="knn",
+                   trControl = trCtrl.knn,
+                   preProcess = c("center","scale"),
+                   tuneLength=20)
+
+plot(model.knn)
+model.knn
+confusionMatrix(predict(model.knn), sbi.data$sbi)
+```
+
+
+
+
+
+
+## Exercises {#cv.exerc}
+
+
+1) What are the advantages and disadvantages of k-fold cross-
+validation relative to the validation set approach? And LOOCV?
+
+<details><summary>*See the solution*</summary>
+
+*The validation set approach is conceptually simple and easily implemented as you are simply partitioning the existing training data into two sets. However, there are two drawbacks: (1.) the estimate of the test error rate can be highly variable depending on which observations are included in the training and validation sets. (2.) the validation set error rate may tend to overestimate the test error rate for the model fit on the entire data set.*
+
+*LOOCV is a special case of k-fold cross-validation with k = n. Thus, LOOCV is the most computationally intense method since the model must be fit n times. Also, LOOCV has higher variance, but lower bias, than k-fold CV.*
+
+</details> <p><p>
+
+
+2) Load the dataset *PimaIndiansDiabetes* in the package *mlbench*     (you might need
+to install this package). This dataset consists of 768 observations 
+of 9 variables: 8 variables which will be used as model 
+predictors (number of times pregnant, plasma glucose concentration, diastolic blood pressure (mm Hg), triceps skin fold thickness (in mm), 2-hr serum insulin measure, body mass index, a diabetes pedigree function, and age) and 1 outcome variable (whether or not the patient has diabetes).  
+Use the KNN algorithm to predict diabetes using all the predictors available.
+Choose the number of neighbours using cross-validation
+
+<details><summary>*See the solution code*</summary>
+
+```{r}
+#install.packages("mlbench")
+library(mlbench)
+library(caret)
+library(class)
+set.seed(1999)
+
+data(PimaIndiansDiabetes)
+
+
+trCtrl.knn.diab <- trainControl(method = "repeatedcv",
+                           number = 10,  #10-fold CV
+                           repeats = 10,
+                           classProbs = TRUE,
+                           savePredictions = TRUE)
+
+model.knn.diab  <- train(diabetes ~ ., 
+                   data = PimaIndiansDiabetes, 
+                   method="knn",
+                   trControl = trCtrl.knn.diab,
+                   tuneLength=20,
+                   preProcess = c("center","scale"))
+model.knn.diab
+plot(model.knn.diab)
+
+
+```
+</details> 
