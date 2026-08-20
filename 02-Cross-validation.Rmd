@@ -315,23 +315,23 @@ validation relative to the validation set approach? And LOOCV?
 </details> <p><p>
 
 
-2) Load the dataset *PimaIndiansDiabetes* in the package *mlbench*     (you might need
-to install this package). This dataset consists of 768 observations 
-of 9 variables: 8 variables which will be used as model 
+2) Load the dataset *Pima.tr* in the package *MASS* (you might need
+to install this package). This dataset consists of 200 observations 
+of 8 variables: 7 variables which will be used as model 
 predictors (number of times pregnant, plasma glucose concentration, diastolic blood pressure (mm Hg), triceps skin fold thickness (in mm), 2-hr serum insulin measure, body mass index, a diabetes pedigree function, and age) and 1 outcome variable (whether or not the patient has diabetes).  
-Use the KNN algorithm to predict diabetes using all the predictors available.
+Use the KNN algorithm to predict diabetes (*type*) using all the predictors available.
 Choose the number of neighbours using cross-validation
 
 <details><summary>*See the solution code*</summary>
 
 ```{r}
-#install.packages("mlbench")
-library(mlbench)
+#install.packages("MASS")
+library(MASS)
 library(caret)
 library(class)
 set.seed(1999)
 
-data(PimaIndiansDiabetes)
+data(Pima.tr)
 
 
 trCtrl.knn.diab <- trainControl(method = "repeatedcv",
@@ -340,8 +340,8 @@ trCtrl.knn.diab <- trainControl(method = "repeatedcv",
                            classProbs = TRUE,
                            savePredictions = TRUE)
 
-model.knn.diab  <- train(diabetes ~ ., 
-                   data = PimaIndiansDiabetes, 
+model.knn.diab  <- train(type ~ ., 
+                   data = Pima.tr, 
                    method="knn",
                    trControl = trCtrl.knn.diab,
                    tuneLength=20,

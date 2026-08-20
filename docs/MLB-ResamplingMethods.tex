@@ -125,7 +125,7 @@
 \makeatother
 \subtitle{Module 3}
 \author{Armando Teixeira-Pinto}
-\date{2026-07-27}
+\date{2026-08-20}
 
 \begin{document}
 \maketitle
@@ -1197,11 +1197,11 @@ And finally, knn.
 \setcounter{enumi}{1}
 \tightlist
 \item
-  Load the dataset \emph{PimaIndiansDiabetes} in the package \emph{mlbench} (you might need
-  to install this package). This dataset consists of 768 observations
-  of 9 variables: 8 variables which will be used as model
+  Load the dataset \emph{Pima.tr} in the package \emph{MASS} (you might need
+  to install this package). This dataset consists of 200 observations
+  of 8 variables: 7 variables which will be used as model
   predictors (number of times pregnant, plasma glucose concentration, diastolic blood pressure (mm Hg), triceps skin fold thickness (in mm), 2-hr serum insulin measure, body mass index, a diabetes pedigree function, and age) and 1 outcome variable (whether or not the patient has diabetes).\\
-  Use the KNN algorithm to predict diabetes using all the predictors available.
+  Use the KNN algorithm to predict diabetes (\emph{type}) using all the predictors available.
   Choose the number of neighbours using cross-validation
 \end{enumerate}
 
@@ -1209,30 +1209,23 @@ And finally, knn.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\#install.packages("mlbench")}
-\FunctionTok{library}\NormalTok{(mlbench)}
+\CommentTok{\#install.packages("MASS")}
+\FunctionTok{library}\NormalTok{(MASS)}
 \FunctionTok{library}\NormalTok{(caret)}
 \FunctionTok{library}\NormalTok{(class)}
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{1999}\NormalTok{)}
 
-\FunctionTok{data}\NormalTok{(PimaIndiansDiabetes)}
-\end{Highlighting}
-\end{Shaded}
+\FunctionTok{data}\NormalTok{(Pima.tr)}
 
-\begin{verbatim}
-## Warning in data(PimaIndiansDiabetes): data set 'PimaIndiansDiabetes' not found
-\end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{trCtrl.knn.diab }\OtherTok{\textless{}{-}} \FunctionTok{trainControl}\NormalTok{(}\AttributeTok{method =} \StringTok{"repeatedcv"}\NormalTok{,}
                            \AttributeTok{number =} \DecValTok{10}\NormalTok{,  }\CommentTok{\#10{-}fold CV}
                            \AttributeTok{repeats =} \DecValTok{10}\NormalTok{,}
                            \AttributeTok{classProbs =} \ConstantTok{TRUE}\NormalTok{,}
                            \AttributeTok{savePredictions =} \ConstantTok{TRUE}\NormalTok{)}
 
-\NormalTok{model.knn.diab  }\OtherTok{\textless{}{-}} \FunctionTok{train}\NormalTok{(diabetes }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }
-                   \AttributeTok{data =}\NormalTok{ PimaIndiansDiabetes, }
+\NormalTok{model.knn.diab  }\OtherTok{\textless{}{-}} \FunctionTok{train}\NormalTok{(type }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }
+                   \AttributeTok{data =}\NormalTok{ Pima.tr, }
                    \AttributeTok{method=}\StringTok{"knn"}\NormalTok{,}
                    \AttributeTok{trControl =}\NormalTok{ trCtrl.knn.diab,}
                    \AttributeTok{tuneLength=}\DecValTok{20}\NormalTok{,}
@@ -1244,39 +1237,39 @@ And finally, knn.
 \begin{verbatim}
 ## k-Nearest Neighbors 
 ## 
-## 768 samples
-##   8 predictor
-##   2 classes: 'neg', 'pos' 
+## 200 samples
+##   7 predictor
+##   2 classes: 'No', 'Yes' 
 ## 
-## Pre-processing: centered (8), scaled (8) 
+## Pre-processing: centered (7), scaled (7) 
 ## Resampling: Cross-Validated (10 fold, repeated 10 times) 
-## Summary of sample sizes: 691, 691, 691, 691, 691, 692, ... 
+## Summary of sample sizes: 180, 179, 180, 180, 180, 181, ... 
 ## Resampling results across tuning parameters:
 ## 
 ##   k   Accuracy   Kappa    
-##    5  0.7389029  0.4053295
-##    7  0.7394224  0.4047962
-##    9  0.7468267  0.4180659
-##   11  0.7434604  0.4096912
-##   13  0.7364081  0.3904171
-##   15  0.7416251  0.3977650
-##   17  0.7485424  0.4127157
-##   19  0.7541388  0.4228489
-##   21  0.7557040  0.4227617
-##   23  0.7588295  0.4297422
-##   25  0.7515396  0.4093277
-##   27  0.7471087  0.3962969
-##   29  0.7489388  0.3985084
-##   31  0.7505024  0.4013708
-##   33  0.7534979  0.4066469
-##   35  0.7541490  0.4071122
-##   37  0.7521787  0.4003432
-##   39  0.7513807  0.3975556
-##   41  0.7530776  0.3995618
-##   43  0.7523086  0.3964125
+##    5  0.7297306  0.3630839
+##    7  0.7153496  0.3220346
+##    9  0.7163421  0.3229733
+##   11  0.7258333  0.3434643
+##   13  0.7389198  0.3665974
+##   15  0.7384699  0.3588448
+##   17  0.7349699  0.3583874
+##   19  0.7264887  0.3363848
+##   21  0.7229336  0.3242644
+##   23  0.7254624  0.3290931
+##   25  0.7318910  0.3411394
+##   27  0.7344436  0.3486025
+##   29  0.7309937  0.3418477
+##   31  0.7324724  0.3443140
+##   33  0.7389248  0.3562164
+##   35  0.7488559  0.3764668
+##   37  0.7458797  0.3691339
+##   39  0.7454749  0.3656044
+##   41  0.7443985  0.3617584
+##   43  0.7443008  0.3603597
 ## 
 ## Accuracy was used to select the optimal model using the largest value.
-## The final value used for the model was k = 23.
+## The final value used for the model was k = 35.
 \end{verbatim}
 
 \begin{Shaded}
